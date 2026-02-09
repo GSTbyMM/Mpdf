@@ -295,6 +295,8 @@ class ColorConverter
 			if ($mode === 'rgb' || $mode === 'rgba') {
 				$cores[0] = (int) ($cores[0] * 255 / 100);
 			}
+		} else {
+			$cores[0] = (float) $cores[0];
 		}
 
 		if ($ncores > 1 && strpos($cores[1], '%') !== false) {
@@ -305,6 +307,8 @@ class ColorConverter
 			if ($mode === 'hsl' || $mode === 'hsla') {
 				$cores[1] /= 100;
 			}
+		} elseif ($ncores > 1) {
+			$cores[1] = (float) $cores[1];
 		}
 
 		if ($ncores > 2 && strpos($cores[2], '%') !== false) {
@@ -315,10 +319,22 @@ class ColorConverter
 			if ($mode === 'hsl' || $mode === 'hsla') {
 				$cores[2] /= 100;
 			}
+		} elseif ($ncores > 2) {
+			$cores[2] = (float) $cores[2];
 		}
 
 		if ($ncores > 3 && strpos($cores[3], '%') !== false) {
 			$cores[3] = (float) $cores[3];
+		} elseif ($ncores > 3) {
+			$cores[3] = (float) $cores[3];
+		}
+
+		if ($ncores > 4) {
+			$cores[4] = (float) $cores[4];
+		}
+
+		if ($ncores > 5) {
+			$cores[5] = (float) $cores[5];
 		}
 
 		return $cores;
