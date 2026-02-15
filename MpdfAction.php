@@ -22,6 +22,20 @@ class MpdfAction extends Action {
 	 */
 	public function show() {
 		global $wgMpdfSimpleOutput;
+		global $wgMpdfDefaultFont;
+		global $wgMpdfAutoScriptToLang;
+		global $wgMpdfUseAdobeCJK;
+
+		// Set default values if not configured
+		if ( !isset( $wgMpdfDefaultFont ) ) {
+			$wgMpdfDefaultFont = 'DejaVuSans';
+		}
+		if ( !isset( $wgMpdfAutoScriptToLang ) ) {
+			$wgMpdfAutoScriptToLang = true;
+		}
+		if ( !isset( $wgMpdfUseAdobeCJK ) ) {
+			$wgMpdfUseAdobeCJK = false;
+		}
 
 		$title = $this->getTitle();
 		$output = $this->getOutput();
@@ -118,16 +132,19 @@ class MpdfAction extends Action {
 				'margin_footer' => $marginFooter,
 				'orientation' => $orientation,
 				'tempDir' => _MPDF_TEMP_PATH,
+				'default_font' => $wgMpdfDefaultFont,
+				'autoScriptToLang' => $wgMpdfAutoScriptToLang,
+				'useAdobeCJK' => $wgMpdfUseAdobeCJK,
 		] );
 
-			// Suppress warning messages, because the mPDF library
-			// itself generates warnings (due to trying to add
-			// variables with a value of 'auto'), and if these get
-			// printed out, they can get into the PDF file and make
-			// it unreadable.
-			AtEase::suppressWarnings();
-			$mpdf->WriteHTML( $html );
-			AtEase::restoreWarnings();
+		// Suppress warning messages, because the mPDF library
+		// itself generates warnings (due to trying to add
+		// variables with a value of 'auto'), and if these get
+		// printed out, they can get into the PDF file and make
+		// it unreadable.
+		AtEase::suppressWarnings();
+		$mpdf->WriteHTML( $html );
+		AtEase::restoreWarnings();
 
 			$mpdf->Output( $filename . '.pdf', 'D' );
 		}
